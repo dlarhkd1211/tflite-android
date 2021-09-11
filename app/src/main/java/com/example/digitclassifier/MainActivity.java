@@ -37,11 +37,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button finishBtn = findViewById(R.id.finish_Btn);
-        finishBtn.setOnClickListener(new View.OnClickListener(){
+//        Button finishBtn = findViewById(R.id.finish_Btn);
+//        finishBtn.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view){
+//                finish();
+//            }
+//        });
+
+        Button drawSampleBtn = findViewById(R.id.draw_sample_Btn);
+        drawSampleBtn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view){
-                finish();
+            public void onClick(View v){
+                Intent i = new Intent(MainActivity.this, DrawingActivity.class);
+                startActivity(i);
             }
         });
     }
