@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.divyanshu.draw.activity.DrawingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button actBtn = findViewById(R.id.activity_launcg_Btn);
+        Button actBtn = findViewById(R.id.activity_launch_Btn);
         actBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
