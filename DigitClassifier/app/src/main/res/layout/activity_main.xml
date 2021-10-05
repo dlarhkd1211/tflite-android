@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/drawBtn"
         android:layout_weight="1"
-        android:text="DrawView"
+        android:text="DrawView"/>
 
 </LinearLayout>
