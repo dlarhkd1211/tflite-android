@@ -16,7 +16,7 @@ import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 
 public class Classifier {
-    private static final String MODEL_NAME = 'keras_model.tflite';
+    private static final String MODEL_NAME = "keras_model.tflite";
     Context context;
     Interpreter interpreter = null;
     int modelInputWidth, modelInputHeight, modelInputChannel;
@@ -93,7 +93,7 @@ public class Classifier {
                 max = f;
             }
         }
-        return new Pair<>(argmax, max)
+        return new Pair<>(argmax, max);
     }
 
     public Pair<Integer, Float> classify(Bitmap image) {
