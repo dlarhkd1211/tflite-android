@@ -1,4 +1,3 @@
-
 package com.example.digitclassifier.draw;
 
 import android.graphics.Bitmap;
@@ -15,11 +14,8 @@ import com.divyanshu.draw.widget.DrawView;
 import com.example.digitclassifier.R;
 import com.example.digitclassifier.tflite.*;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.Locale;
-
 
 public class DrawActivity extends AppCompatActivity {
 
@@ -46,18 +42,23 @@ public class DrawActivity extends AppCompatActivity {
             resultView.setText(outStr);
         });
 
+        Button clearBtn = findViewById(R.id.clearBtn);
+        clearBtn.setOnClickListener(v -> {
+            drawView.clearCanvas();
+        });
+
         cls = new Classifier(this);
         try {
             cls.init();
-        } catch (IOException ioe) {
+        } catch(IOException ioe) {
             Log.d("DigitClassifier", "failed to init Classifier", ioe);
         }
+
     }
+
     @Override
     protected void onDestroy() {
         cls.finish();
         super.onDestroy();
     }
 }
-
-

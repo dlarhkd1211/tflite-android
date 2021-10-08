@@ -66,7 +66,7 @@ public class Classifier {
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(bitmap.getByteCount());
         byteBuffer.order(ByteOrder.nativeOrder());
 
-        int[] pixels = new int[bitmap.getWidth() * bitmap.getByteCount()];
+        int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
         bitmap.getPixels(pixels, 0 ,bitmap.getWidth(), 0, 0 ,bitmap.getWidth(), bitmap.getHeight());
 
         for (int pixel : pixels) {
@@ -74,8 +74,8 @@ public class Classifier {
             int g = pixel >> 8 & 0xFF;
             int b = pixel & 0xFF;
 
-            float acgPixelValue = (r + g + b) / 3.0f;
-            float normalizedPixelValue = acgPixelValue / 255.0f;
+            float avgPixelValue = (r + g + b) / 3.0f;
+            float normalizedPixelValue = avgPixelValue / 255.0f;
 
             byteBuffer.putFloat(normalizedPixelValue);
         }

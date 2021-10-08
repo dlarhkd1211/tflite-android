@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DigitClassifier">
         <activity
-            android:name=".DrawActivity"
+            android:name=".draw.DrawActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
