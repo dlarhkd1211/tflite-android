@@ -37,6 +37,9 @@ public class ClassifierWithModel {
     TensorBuffer outputBuffer;
     private List<String> labels;
 
+    public ClassifierWithModel(Context context) {
+        this.context = context;
+    }
 
     public void init() throws IOException {
         model = Model.createModel(context, MODEL_NAME);
@@ -57,9 +60,31 @@ public class ClassifierWithModel {
         Tensor outputTensor = model.getOutputTensor(0);
         outputBuffer = TensorBuffer.createFixedSize(outputTensor.shape(), outputTensor.dataType());
     }
+    private Bitmap convertBitmapToARGB8888(Bitmap bitmap) {
+        return bitmap.copy(Bitmap.Config.ARGB_8888,true);
+    }
 
-    public Pair<String, Float> classify(Bitmap image) {
-        inputImage = loadImage(image);
+    private TensorImage loadImage(final Bitmap bitmap, int sensorOrientation) {
+        if(bitmap.getConfig() != Bitmap.Config.ARGB_8888) {
+            inputImage.load(convertBitmapToARGB8888(bitmap));
+        } else {
+            inputImage.load(bitmap);
+        }
+
+        int cropSize = Math.min(bitmap.getWidth(), bitmap.getHeight());
+        int numRotation = sensorOrientation / 90;
+
+        ImageProcessor imageProcessor = new ImageProcessor.Builder()
+                .add(new ResizeWithCropOrPadOp(cropSize, cropSize))
+                .add(new ResizeOp(modelInputWidth, modelInputHeight, NEAREST_NEIGHBOR))
+                .add(new Rot90Op(numRotation))
+                .add(new NormalizeOp(0.0f, 255.0f))
+                .build();
+
+        return imageProcessor.process(inputImage);
+    }
+    public Pair<String, Float> classify(Bitmap image, int sensorOrientation) {
+        inputImage = loadImage(image, sensorOrientation);
 
         Object[] inputs = new Object[]{inputImage.getBuffer()};
         Map<Integer, Object> outputs = new HashMap();
@@ -71,6 +96,25 @@ public class ClassifierWithModel {
                 new TensorLabel(labels, outputBuffer).getMapWithFloatValue();
 
         return argmax(output);
+    }
+
+    public Pair<String, Float> classify(Bitmap image) {
+        return classify(image, 0);
+    }
+
+    private Pair<String, Float> argmax(Map<String, Float> map) {
+        String maxKey = "";
+        float maxVal = -1;
+
+        for(Map.Entry<String, Float> entry : map.entrySet()) {
+            float f = entry.getValue();
+            if(f > maxVal) {
+                maxKey = entry.getKey();
+                maxVal = f;
+            }
+        }
+
+        return new Pair<>(maxKey, maxVal);
     }
 
     public void finish() {

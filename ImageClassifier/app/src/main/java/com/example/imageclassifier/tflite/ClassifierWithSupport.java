@@ -71,7 +71,7 @@ public class ClassifierWithSupport {
         return imageProcessor.process(inputImage);
     }
 
-    public Pair<Integer, Float> classify(Bitmap image) {
+    public Pair<String, Float> classify(Bitmap image) {
         inputImage = loadImage(image);
         interpreter.run(inputImage.getBuffer(), outputBuffer.getBuffer().rewind());
 
@@ -87,12 +87,16 @@ public class ClassifierWithSupport {
 
         for(Map.Entry<String, Float> entry : map.entrySet()) {
             float f = entry.getValue();
-            if(f > maxVal) {
+            if (f > maxVal) {
                 maxKey = entry.getKey();
                 maxVal = f;
             }
         }
-
         return new Pair<>(maxKey, maxVal);
+    }
+
+    public void finish() {
+        if(interpreter != null)
+            interpreter.close();
     }
 }
